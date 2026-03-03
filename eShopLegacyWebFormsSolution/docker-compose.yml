@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+
+  eshop.legacy.webforms:
+    image: eshop/legacywebforms:${TAG:-latest}
+    build:
+      context: ./deploy/webforms
+      dockerfile: Dockerfile
+    depends_on:
+      - sql.data
+
+  sql.data:
+    image: octopusdeploy/mssql-server-windows-express

@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  eshop.legacy.webforms:
+    environment:
+      - CatalogDBContext=Server=sql.data;Database=Microsoft.eShopOnContainers.Services.CatalogDb;User Id=sa;Password=Pass@word
+      - UseMockData=False
+      - UseCustomizationData=False
+      - UseAzureStorage=False
+      - StorageConnectionString=${ESHOP_AZURE_STORAGE_CONNECTION_STRING}
+      - AppInsightsInstrumentationKey=${APP_INSIGHTS_INSTRUMENTATION_KEY}
+    ports:
+      - "5112:80"
+
+  sql.data:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
+    healthcheck:
+      test: [ "CMD", "sqlcmd", "-U", "sa", "-P", "Pass@word", "-Q", "select 1" ]
+      interval: 1s
+      retries: 20
+
+# networks:
+#   default:
+#     name: nat
+#     external: true
